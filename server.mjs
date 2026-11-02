@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
-import { resolve, extname } from 'node:path';
+import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
@@ -21,23 +21,88 @@ const mime = {
 const players = new Map();
 const messages = new Map();
 
+const allowedVehicles = new Set([
+  'hatch',
+  'taxi',
+  'suv',
+  'jeep',
+  'auto',
+  'bus',
+  'swift',
+  'private',
+  'van',
+  'truck',
+  'mini',
+  'load',
+  'tractor',
+  'tanker',
+  'garbage',
+  'bike',
+  'sport',
+  'scooter',
+  'moped',
+  'bicycle',
+  'goodsauto',
+  'plane'
+]);
+
 function json(res, code, data) {
   res.writeHead(code, {
     'Content-Type': 'application/json',
     'Cache-Control': 'no-store',
     'Access-Control-Allow-Origin': '*'
   });
+
   res.end(JSON.stringify(data));
 }
 
 async function body(req) {
   let s = '';
-  for await (const c of req) s += c;
+
+  for await (const c of req) {
+    s += c;
+  }
 
   try {
     return JSON.parse(s || '{}');
   } catch {
     return {};
+  }
+}
+
+function safeNumber(value, fallback = 0) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+}
+
+function sanitizeVehicle(vehicle) {
+  if (!vehicle || typeof vehicle !== 'object') {
+    return null;
+  }
+
+  const kind = String(vehicle.kind || '').toLowerCase();
+
+  if (!allowedVehicles.has(kind)) {
+    return null;
+  }
+
+  return {
+    kind,
+    x: safeNumber(vehicle.x),
+    y: safeNumber(vehicle.y),
+    z: safeNumber(vehicle.z),
+    yaw: safeNumber(vehicle.yaw)
+  };
+}
+
+function removeInactivePlayers() {
+  const now = Date.now();
+
+  for (const [id, player] of players) {
+    if (now - player.last > 15000) {
+      players.delete(id);
+      messages.delete(id);
+    }
   }
 }
 
@@ -50,12 +115,15 @@ const server = createServer(async (req, res) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type'
       }).end();
+
       return;
     }
 
     // Health check
     if (url.pathname === '/health') {
-      return json(res, 200, { status: 'ok' });
+      return json(res, 200, {
+        status: 'ok'
+      });
     }
 
     // Register or update player
@@ -63,33 +131,45 @@ const server = createServer(async (req, res) => {
       const p = await body(req);
 
       if (!p.id || !p.name) {
-        return json(res, 400, { error: 'name required' });
+        return json(res, 400, {
+          error: 'name required'
+        });
       }
 
-      players.set(p.id, {
-        id: p.id,
+      const vehicle = sanitizeVehicle(p.vehicle);
+
+      players.set(String(p.id), {
+        id: String(p.id),
         name: String(p.name).slice(0, 18),
         gender: p.gender || 'other',
-        x: Number(p.x) || 0,
-        z: Number(p.z) || 0,
-        score: Number(p.score) || 0,
+
+        x: safeNumber(p.x),
+        y: safeNumber(p.y),
+        z: safeNumber(p.z),
+
+        score: safeNumber(p.score),
+
+        // Multiplayer vehicle synchronisation
+        vehicle,
+
         last: Date.now()
       });
 
-      return json(res, 200, { ok: true });
+      return json(res, 200, {
+        ok: true
+      });
     }
 
     // Multiplayer state
     if (url.pathname === '/api/state' && req.method === 'GET') {
       const self = url.searchParams.get('self');
-      const now = Date.now();
 
-      for (const [id, p] of players) {
-        if (now - p.last > 15000) players.delete(id);
-      }
+      removeInactivePlayers();
 
       return json(res, 200, {
-        players: [...players.values()],
+        players: [...players.values()]
+          .filter(p => p.id !== self),
+
         messages: messages.get(self) || []
       });
     }
@@ -97,16 +177,17 @@ const server = createServer(async (req, res) => {
     // Other players
     if (url.pathname === '/api/players' && req.method === 'GET') {
       const self = url.searchParams.get('self');
-      const now = Date.now();
 
-      for (const [id, p] of players) {
-        if (now - p.last > 15000) players.delete(id);
-      }
+      removeInactivePlayers();
 
       return json(res, 200, {
         players: [...players.values()]
           .filter(p => p.id !== self)
-          .map(({ id, name, gender }) => ({ id, name, gender }))
+          .map(({ id, name, gender }) => ({
+            id,
+            name,
+            gender
+          }))
       });
     }
 
@@ -119,7 +200,9 @@ const server = createServer(async (req, res) => {
         !players.has(m.to) ||
         m.from === m.to
       ) {
-        return json(res, 404, { ok: false });
+        return json(res, 404, {
+          ok: false
+        });
       }
 
       const arr = messages.get(m.to) || [];
@@ -133,27 +216,36 @@ const server = createServer(async (req, res) => {
 
       messages.set(m.to, arr.slice(-50));
 
-      return json(res, 200, { ok: true });
+      return json(res, 200, {
+        ok: true
+      });
     }
 
     // Leaderboard
     if (url.pathname === '/api/leaderboard' && req.method === 'GET') {
+      removeInactivePlayers();
+
       const ranked = [...players.values()]
         .sort((a, b) => (b.score || 0) - (a.score || 0))
         .slice(0, 50);
 
-      return json(res, 200, { players: ranked });
+      return json(res, 200, {
+        players: ranked
+      });
     }
 
     // Serve game files
+    const requestedPath = decodeURIComponent(url.pathname);
+
     const filePath = resolve(
       root,
-      '.' + decodeURIComponent(url.pathname)
+      '.' + requestedPath
     );
 
+    // Prevent directory traversal
     if (
       filePath !== root.slice(0, -1) &&
-      !filePath.startsWith(root)
+      !filePath.startsWith(root.endsWith(sep) ? root : root + sep)
     ) {
       res.writeHead(403).end();
       return;
@@ -177,6 +269,7 @@ const server = createServer(async (req, res) => {
 
   } catch (error) {
     console.error('Request error:', error);
+
     res.writeHead(404).end('Not found');
   }
 });
@@ -185,5 +278,7 @@ const server = createServer(async (req, res) => {
 const PORT = Number(process.env.PORT || 3000);
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Kurukkanmoola X server running on port ${PORT}`);
+  console.log(
+    `Kurukkanmoola X server running on port ${PORT}`
+  );
 });
