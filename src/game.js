@@ -89,7 +89,12 @@ function stopEnvironmentAudio(){
 }
 function networkBase(){return location.origin;}
 async function net(path,options={}){try{const r=await fetch(networkBase()+path,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});return r.ok?await r.json():null;}catch{return null}}
-function sendPlayerState(){if(!started||!playerName)return;const p=activePosition();net('/api/player',{method:'POST',body:JSON.stringify({id:playerId,name:playerName,gender:playerGender,x:p.x,z:p.z,score:visited.size})});}
+function sendPlayerState(){
+ if(!started||!playerName)return;
+ const p=activePosition();
+ const vehicle=driving?{kind:driving.kind,x:p.x,y:p.y,z:p.z,yaw:driving.mesh.rotation.y}:drivingPlane?{kind:'plane',x:p.x,y:p.y,z:p.z,yaw:startupPlane.rotation.y}:null;
+ net('/api/player',{method:'POST',body:JSON.stringify({id:playerId,name:playerName,gender:playerGender,x:p.x,y:p.y,z:p.z,score:visited.size,vehicle})});
+}
 function disposeRemotePlayer(g){
  if(!g)return;
  scene.remove(g);
@@ -132,11 +137,30 @@ function renderRemotePlayers(list){
    g.userData.gender=normalizedGender;
   }
   const x=Number(p.x)||0,z=Number(p.z)||0;
-  g.userData.target.set(x,terrainHeight(x,z),z);
+  g.userData.target.set(x,Number.isFinite(Number(p.y))?Number(p.y):terrainHeight(x,z),z);
+  const vehicleState=p.vehicle&&typeof p.vehicle==='object'&&typeof p.vehicle.kind==='string'?p.vehicle:null;
+  const vehicleKind=vehicleState?.kind||null;
+  if(g.userData.vehicleKind!==vehicleKind){
+   if(g.userData.vehicleObject){
+    const oldMesh=g.userData.vehicleObject.mesh||g.userData.vehicleObject;
+    scene.remove(oldMesh);
+    oldMesh.traverse(o=>{if(o.isMesh){o.geometry?.dispose?.();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose?.());else o.material.dispose?.();}}});
+   }
+   g.userData.vehicleObject=null;g.userData.vehicleKind=vehicleKind;
+   if(vehicleKind){const remoteVehicle=vehicleKind==='plane'?createAircraft('Mugeena'):createVehicle(vehicleKind);scene.add(remoteVehicle.mesh||remoteVehicle);g.userData.vehicleObject=remoteVehicle;}
+  }
+  if(g.userData.vehicleObject&&vehicleState){
+   const remoteMesh=g.userData.vehicleObject.mesh||g.userData.vehicleObject;
+   remoteMesh.position.set(Number(vehicleState.x)||x,Number.isFinite(Number(vehicleState.y))?Number(vehicleState.y):terrainHeight(x,z),Number(vehicleState.z)||z);
+   remoteMesh.rotation.y=Number(vehicleState.yaw)||0;g.visible=false;
+  }else g.visible=true;
   g.userData.name=p.name;
  }
  for(const [id,g] of remotePlayers){
-  if(!seen.has(id)){disposeRemotePlayer(g);remotePlayers.delete(id);}
+  if(!seen.has(id)){
+   if(g.userData.vehicleObject){const vm=g.userData.vehicleObject.mesh||g.userData.vehicleObject;scene.remove(vm);vm.traverse(o=>{if(o.isMesh){o.geometry?.dispose?.();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose?.());else o.material.dispose?.();}}});}
+   disposeRemotePlayer(g);remotePlayers.delete(id);
+  }
  }
 }
 function updateRemotePlayers(dt){
