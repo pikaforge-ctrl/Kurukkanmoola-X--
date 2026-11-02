@@ -1,0 +1,14 @@
+{
+  "name": "kurukkanmoola-x",
+  "version": "24.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check src/game.js && node --check src/world.js && node --check src/entities.js && node --check src/materials.js && node --check src/people-detail.js && node --check src/world-layout.js && node --check src/landscape.js && node --check src/kit/assets.js && node --check server.mjs",
+    "test": "node --import ./tests/support/three-loader.mjs --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  }
+}

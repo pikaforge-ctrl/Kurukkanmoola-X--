@@ -1,0 +1,215 @@
+{
+  "counts": {
+    "town": 410,
+    "residential": 720,
+    "farm": 85,
+    "hill": 26,
+    "backwater": 95,
+    "workshop": 60,
+    "hotel": 24,
+    "school": 9,
+    "cabin": 26
+  },
+  "stats": {
+    "terrainTriangles": 318720,
+    "farTrees": 24746,
+    "nearTrees": 0,
+    "grassClumps": 5788,
+    "teaBushes": 29806
+  },
+  "structures": {
+    "monument": 1,
+    "temple": 6,
+    "college": 2,
+    "shop": 201,
+    "house": 1179,
+    "hotel": 28,
+    "workshop": 60,
+    "school": 9,
+    "cabin": 26
+  },
+  "landmarkBuildings": [
+    {
+      "name": "SREE SUBRAHMANYA SWAMI TEMPLE",
+      "x": 667.6776695296637,
+      "z": -797.3223304703363
+    },
+    {
+      "name": "VELLAT BHAGAVATHY TEMPLE",
+      "x": -850,
+      "z": -645
+    },
+    {
+      "name": "SREE VALSANTHA",
+      "x": -1050,
+      "z": 605
+    },
+    {
+      "name": "N.S.S. HINDU COLLEGE",
+      "x": 850,
+      "z": -145
+    },
+    {
+      "name": "SCIENCE BLOCK",
+      "x": 950,
+      "z": -130
+    },
+    {
+      "name": "CHURULI RESORT",
+      "x": -4180,
+      "z": 2310
+    },
+    {
+      "name": "CHURULI RESORT",
+      "x": -3630,
+      "z": 2600
+    },
+    {
+      "name": "CHURULI RESORT",
+      "x": -4070,
+      "z": 2780
+    },
+    {
+      "name": "CHURULI RESORT",
+      "x": -3650,
+      "z": 2280
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -4043.1665867567062,
+      "z": 2379.935074795503
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 5437.5789747573435,
+      "z": -510.4325547348708
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -3935.5988915544003,
+      "z": 2468.327538482845
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -3784.553129784763,
+      "z": 2803.284742834512
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -4003.012000443414,
+      "z": 2614.5224245497957
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 4556.644478533417,
+      "z": -479.02796803973615
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 3548.8822017796338,
+      "z": -567.611098755151
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 3234.7236186265945,
+      "z": -455.5010857642628
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -4007.7979158144444,
+      "z": 2407.6852010563016
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 4400.656231213361,
+      "z": -460.76100608333945
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -3653.4848710056394,
+      "z": 2348.3679831493646
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -3929.0612136013806,
+      "z": 2564.623601117637
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 3643.858409114182,
+      "z": -605.0863165757619
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -3821.8346511479467,
+      "z": 2785.024452628568
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -4070.121385715902,
+      "z": 2427.3819084861316
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -4047.859019925818,
+      "z": 2625.694463169202
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 3552.563116233796,
+      "z": -633.4893196122721
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 2790.2572706341743,
+      "z": -498.6362767056562
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 3585.980027448386,
+      "z": -725.6153088295832
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": 4283.72739199549,
+      "z": -628.7899182527326
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -4083.9960974175483,
+      "z": 2574.0105211967602
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -4015.8392084762454,
+      "z": 2458.1842878484167
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -3817.671659728512,
+      "z": 2337.4937783461064
+    },
+    {
+      "name": "HOMESTAY & RESORT",
+      "x": -3983.9068286586553,
+      "z": 2641.5711934911087
+    },
+    {
+      "name": "VILLAGE TEMPLE",
+      "x": -3250,
+      "z": 2200
+    },
+    {
+      "name": "VILLAGE TEMPLE",
+      "x": 1950,
+      "z": 700
+    },
+    {
+      "name": "VILLAGE TEMPLE",
+      "x": -1875,
+      "z": -2050
+    }
+  ],
+  "vehicles": 23,
+  "plane": true
+}

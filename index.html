@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#11221d"><title>Kurukkanmoola X — Kerala Online Multiplayer</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:,">
+<script type="importmap">{"imports":{"three":"./vendor/build/three.module.js","three/addons/":"./vendor/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="world" aria-label="3D game viewport"></div>
+<div id="vignette"></div>
+<header id="brand"><span class="emblem">K</span><div><h1>KURUKKANMOOLA X</h1><p>KERALA ONLINE MULTIPLAYER</p></div></header>
+<div id="compass"><span>W</span><span>NW</span><b id="heading">N</b><span>NE</span><span>E</span></div>
+<div id="socialHud" class="glass"><button id="sceneLeaderboard">🏆</button><button id="sceneMessages">✉</button><span id="onlineCount">0 online</span></div>
+<div id="status" class="glass"><span id="weatherIcon">☀</span><span id="clock">16:20</span><i></i><span id="weather">Golden hour</span><button id="pauseButton" aria-label="Pause game">Ⅱ</button></div>
+<div id="jobHud" class="glass"><span id="jobRole">Unemployed</span><b id="jobMoney">₹0</b></div>
+<aside id="mission" class="glass"><small>THE KURUKKANMOOLA TRAIL</small><h2 id="missionTitle">A town worth discovering</h2><p id="missionText">Find the temple courtyard.</p><div id="progress"></div></aside>
+<div id="destination"><span>◇</span><b id="distance"></b></div>
+<div id="mapPanel" class="glass"><div class="map-label"><span>KURUKKANMOOLA DISTRICT</span><b>N ↑</b></div><canvas id="minimap" width="320" height="250"></canvas><div class="map-label"><span id="district">Mannam Road</span><span>M ↗</span></div></div>
+<div id="vehicleHud" class="glass"><span id="travelMode">ON FOOT</span><strong id="speed">0</strong><small>KM/H</small></div>
+<div id="prompt" class="glass" hidden></div>
+<div id="toast" role="status" hidden></div>
+<div id="fade"></div>
+<footer id="keys"><span><kbd>W A S D</kbd> Move / Plane turn</span><span><kbd>SHIFT</kbd> Run</span><span><kbd>E</kbd> Enter / Exit</span><span><kbd>SPACE</kbd> Plane climb</span><span><kbd>CTRL</kbd> Plane descend</span><span><kbd>F</kbd> Talk / Work</span><span><kbd>M</kbd> Map</span><span><kbd>ESC</kbd> Pause</span></footer>
+<div id="telemetry"></div>
+<section id="start" class="overlay">
+ <div class="intro"><div class="eyebrow">ONLINE OPEN WORLD · KERALA, INDIA</div><h2>KURUKKANMOOLA X</h2><p>Walk the palm-lined streets of Perunna. Take the long way home through the backwaters, temples, and everyday life of Kerala.</p><div class="player-setup">
+   <label>Player name <input id="playerName" maxlength="18" autocomplete="nickname" placeholder="Enter your name"></label>
+   <label>Gender <select id="genderSelect"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></label>
+  </div>
+  <div class="intro-actions"><button id="play" class="primary" disabled>Loading Kurukkanmoola X…</button><button id="referenceButton">View references</button></div>
+  <div class="intro-actions"><button id="leaderboardButton">Leaderboard</button><button id="messageButton">Private messages</button></div>
+  <div class="intro-note">Online multiplayer · Live player names · Private messages · Live leaderboard · Keyboard & mouse</div></div>
+ <div class="intro-bottom"><span>09.44° N / 76.55° E <small>ARTISTIC INTERPRETATION</small></span><span>WALK · DRIVE · DISCOVER</span></div>
+ <div id="loadError" role="alert" hidden></div>
+</section>
+<dialog id="teaMenu"><button class="close" data-close="teaMenu" aria-label="Close">×</button><small>CHAYA KADA</small><h2>What will you have?</h2><p class="teaPurse">Your money: <b id="teaMoney">₹0</b></p><div id="teaItems"></div><p class="teaHint">Click an item or press 1–6 · Esc to leave the counter</p></dialog>
+<dialog id="pause"><button class="close" data-close="pause" aria-label="Close">×</button><small>TAKE A MOMENT</small><h2>Your journey, your pace.</h2><label>Graphics<select id="quality"><option value="high">High — soft shadows, reflections, bloom</option><option value="medium" selected>Balanced — recommended</option><option value="low">Low — slower computers</option></select></label><label>Atmosphere<select id="weatherSelect"><option value="sun">Golden hour</option><option value="cloud">Overcast</option><option value="rain">Monsoon rain</option><option value="night">Night</option></select></label><label>Traveller<select id="characterSelect"><option value="male">Olive jacket & backpack</option><option value="female">Red hoodie & backpack</option></select></label><label>Time advances<input id="timeToggle" type="checkbox" checked></label><button id="resume" class="primary">Continue exploring</button><button id="reset">Return to town entrance</button><p class="fine">Mouse drag: orbit · Scroll: zoom · Space: jump / brake<br>C: camera · T: weather · H: hide HUD · V: vehicle directory · L: leaderboard · P: private messages<br>Online mode syncs players through the game server.</p></dialog>
+<dialog id="fullMap"><button class="close" data-close="fullMap" aria-label="Close">×</button><small>YOUR JOURNEY</small><h2>Explore Kurukkanmoola</h2><div class="map-layout"><canvas id="largeMap" width="1000" height="700"></canvas><div id="landmarkList"></div></div><p class="fine">Live playable map · Gold: destination · White: you · Blue: parked vehicles · Click a landmark to set a waypoint.</p><details><summary>Art-direction map reference</summary><img src="assets/references/09-world-layout.png" alt="Provided Perunna map reference"></details></dialog>
+<dialog id="references"><button class="close" data-close="references" aria-label="Close">×</button><small>ART DIRECTION</small><h2>Your reference sheets</h2><nav id="referenceTabs"></nav><img id="referenceImage" alt="Selected game design reference"><p class="fine">Reference artwork guides the procedural models. These PNG sheets are not rigged 3D assets.</p></dialog>
+<dialog id="garage"><button class="close" data-close="garage" aria-label="Close">×</button><small>KERALA ON WHEELS</small><h2>Find your next ride</h2><div id="vehicleList"></div><p class="fine">Select a parked vehicle to set your waypoint. Walk near it and press E to drive.</p></dialog>
+<audio id="gameMusic" src="assets/Background music.mp3" preload="auto" loop></audio>
+<dialog id="leaderboard"><button class="close" data-close="leaderboard" aria-label="Close">×</button><small>KURUKKANMOOLA X</small><h2>Live Leaderboard</h2><div id="leaderboardList"></div><p class="fine">Players are ranked by distance explored during the current server session.</p></dialog>
+<dialog id="messages"><button class="close" data-close="messages" aria-label="Close">×</button><small>PRIVATE MESSAGES</small><h2>Send a message</h2><label>Player <select id="messageTo"><option value="">Select an online player</option></select></label><label>Message <input id="messageText" maxlength="160" placeholder="Write a private message"></label><button id="sendMessage" class="primary">Send privately</button><div id="messageInbox" class="message-inbox"></div></dialog>
+<dialog id="conversation"><button class="close" data-close="conversation" aria-label="Close">×</button><small>PEOPLE OF PERUNNA</small><h2 id="npcName"></h2><p id="npcWords"></p><button data-close="conversation" class="primary">See you around</button></dialog>
+<script type="module">
+import('./src/game.js?v=24').catch(error=>{console.error(error);document.querySelector('#loadError').hidden=false;document.querySelector('#loadError').textContent='The game could not start: '+error.message+'. Start the game with START-WINDOWS.bat (or START-LAN.bat for another device on the same Wi-Fi).';document.querySelector('#play').textContent='Unable to start';});
+</script>
+</body></html>
