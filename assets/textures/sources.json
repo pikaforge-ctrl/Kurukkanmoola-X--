@@ -1,0 +1,63 @@
+{
+  "asphalt": {
+    "asset": "asphalt_02",
+    "files": {
+      "Diffuse": "asphalt-Diffuse.jpg",
+      "nor_gl": "asphalt-nor_gl.jpg",
+      "Rough": "asphalt-Rough.jpg"
+    },
+    "source": "https://polyhaven.com/a/asphalt_02"
+  },
+  "grass": {
+    "asset": "aerial_grass_rock",
+    "files": {
+      "Diffuse": "grass-Diffuse.jpg",
+      "nor_gl": "grass-nor_gl.jpg",
+      "Rough": "grass-Rough.jpg"
+    },
+    "source": "https://polyhaven.com/a/aerial_grass_rock"
+  },
+  "plaster": {
+    "asset": "painted_plaster_wall",
+    "files": {
+      "Diffuse": "plaster-Diffuse.jpg",
+      "nor_gl": "plaster-nor_gl.jpg",
+      "Rough": "plaster-Rough.jpg"
+    },
+    "source": "https://polyhaven.com/a/painted_plaster_wall"
+  },
+  "roof": {
+    "asset": "roof_tiles_14",
+    "files": {
+      "Diffuse": "roof-Diffuse.jpg",
+      "nor_gl": "roof-nor_gl.jpg",
+      "Rough": "roof-Rough.jpg"
+    },
+    "source": "https://polyhaven.com/a/roof_tiles_14"
+  },
+  "paving": {
+    "asset": "pavement_03",
+    "files": {
+      "Diffuse": "paving-Diffuse.jpg",
+      "nor_gl": "paving-nor_gl.jpg",
+      "Rough": "paving-Rough.jpg"
+    },
+    "source": "https://polyhaven.com/a/pavement_03"
+  },
+  "wood": {
+    "asset": "wood_planks_grey",
+    "files": {
+      "Diffuse": "wood-Diffuse.jpg",
+      "nor_gl": "wood-nor_gl.jpg",
+      "Rough": "wood-Rough.jpg"
+    },
+    "source": "https://polyhaven.com/a/wood_planks_grey"
+  },
+  "sky": {
+    "asset": "kloofendal_48d_partly_cloudy_puresky",
+    "files": {
+      "hdri": "sky-hdri.hdr"
+    },
+    "source": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky"
+  }
+}
